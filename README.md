@@ -1,14 +1,15 @@
 # Dreamz Social Media Marketing Hub
 
-A comprehensive web application for cannabis/concentrate marketing content creation with automated product scraping and social media post generation.
+A comprehensive web application for automated social media content creation that works with any website. Currently optimized for WordPress sites with excellent scraping and content generation capabilities.
 
 ## Features
 
-- **Product Scraping**: Automatically scrape product data and images from e-commerce sites
-- **Instagram Post Generator**: Create square-format images with AI-powered captions
-- **Facebook Post Generator**: Create original aspect ratio images with community-focused content
+- **Universal Web Scraping**: Automatically scrape product data and images from any website
+- **Instagram Post Generator**: Create square-format images with AI-powered captions  
+- **Facebook Post Generator**: Create original aspect ratio images with engaging content
 - **Interactive ChatGPT Integration**: Custom prompts for different content styles
-- **Modular Architecture**: Clean, maintainable codebase with separated concerns
+- **WordPress Integration**: Optimized for WordPress sites but works with any platform
+- **Modular Architecture**: Clean, maintainable codebase for easy expansion
 
 ## Tech Stack
 
@@ -26,6 +27,20 @@ A comprehensive web application for cannabis/concentrate marketing content creat
 3. Create `.env` file with credentials
 4. Run: `python flask_wrapper.py`
 
+## Current Status
+
+- ✅ Successfully running with WordPress sites
+- ✅ Automated product scraping and image processing
+- ✅ AI-powered social media content generation
+- ✅ Multi-platform post creation
+
+## Use Cases
+
+- E-commerce product marketing
+- Content automation for any website
+- Social media post generation
+- Multi-platform marketing campaigns
+
 ## Security
 
 - Environment variables for sensitive data
@@ -35,4 +50,3 @@ A comprehensive web application for cannabis/concentrate marketing content creat
 ## License
 
 Private - All rights reserved
-
