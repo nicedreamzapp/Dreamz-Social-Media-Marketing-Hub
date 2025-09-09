@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Tribe Marketing Hub</title>
+    <link rel="stylesheet" href="/static/css/main-styles.css">
+    <link rel="stylesheet" href="/static/css/sidebar-styles.css">
+    <link rel="stylesheet" href="/static/css/product-styles.css">
+    <link rel="stylesheet" href="/static/css/modal-styles.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <!-- Modern Progress Overlay -->
+    <div id="progress-overlay" class="progress-overlay">
+        <div class="progress-container">
+            <div class="progress-spinner"></div>
+            <div class="progress-title" id="progress-title">Starting Scraper...</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-text" id="progress-text">Initializing...</div>
+            <div class="progress-details" id="progress-details">Please wait while we scrape products from the website.</div>
+        </div>
+    </div>
+
+    <!-- Modern Header -->
+    <div class="header">
+        <h1>Divine Tribe Marketing Hub</h1>
+        <div class="header-buttons">
+            <button class="header-btn delete-temp-btn" onclick="clearTemp()">🗑️ Clear Temp</button>
+            <a href="/logout" class="header-btn logout-btn">👋 Logout</a>
+        </div>
+    </div>
+
+    <!-- Main container -->
+    <div class="main-container">
+        <!-- Enhanced Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>✨ Tools</h2>
+            </div>
+            
+            <!-- Data Scrapers section -->
+            <div class="sidebar-section data-scrapers">
+                <h3>📊 Data Scrapers</h3>
+                <button class="sidebar-btn best-sellers-btn" id="best-sellers-btn" onclick="scrapeBestSellers()">🏆 Best Sellers</button>
+                <button class="sidebar-btn featured-btn" id="featured-btn" onclick="scrapeFeatured()">⭐ Featured</button>
+                <button class="sidebar-btn custom-url-btn" id="custom-url-btn" onclick="showCustomUrlModal()">🔗 Custom URL</button>
+            </div>
+            
+            <!-- Social Media section -->
+            <div class="sidebar-section social-media">
+                <h3>📱 Social Media</h3>
+                <button class="sidebar-btn instagram-btn" onclick="generateInstagram()">📸 Instagram</button>
+                <button class="sidebar-btn facebook-btn" onclick="generateFacebook()">📘 Facebook</button>
+                <button class="sidebar-btn youtube-btn" onclick="showComingSoon('YouTube')">📺 YouTube</button>
+                <button class="sidebar-btn reddit-btn" onclick="showComingSoon('Reddit')">🤖 Reddit</button>
+                <button class="sidebar-btn discord-btn" onclick="showComingSoon('Discord')">💬 Discord</button>
+                <button class="sidebar-btn website-btn" onclick="showComingSoon('Website')">🌐 Website</button>
+            </div>
+        </div>
+
+        <!-- Enhanced Content area -->
+        <div class="content-area">
+            <div class="products-header">
+                <div class="products-title">🛍️ Product Gallery</div>
+                <div class="products-count" id="products-count">0 products • 0 images</div>
+            </div>
+            <div class="products-scroll" id="products-scroll">
+                <div class="no-products">
+                    <h3>🚀 Ready to Start</h3>
+                    <p>Use the sidebar to scrape products from a website and build your gallery!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Status bar -->
+    <div class="status-bar">
+        <div class="status-text" id="status-text">✅ Ready</div>
+    </div>
+
+    <!-- Enhanced Custom URL Modal -->
+    <div id="custom-url-modal" class="modal">
+        <div class="modal-content">
+            <h3>🔗 Custom URL Scraper</h3>
+            <input type="text" id="custom-url-input" placeholder="Enter product URL to scrape..." />
+            <div class="modal-buttons">
+                <button class="modal-btn modal-ok" onclick="scrapeCustomUrl()">🚀 Scrape</button>
+                <button class="modal-btn modal-cancel" onclick="hideCustomUrlModal()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Alert/Confirm Pop-up -->
+    <div id="alert-overlay" class="alert-overlay">
+        <div class="alert-container">
+            <div class="alert-message" id="alert-message"></div>
+            <div class="alert-buttons" id="alert-buttons"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/app-state.js"></script>
+    <script src="/static/js/api-calls.js"></script>
+    <script src="/static/js/ui-handlers.js"></script>
+    <script src="/static/js/modal-handlers.js"></script>
+    <script src="/static/js/file-handlers.js"></script>
+    <script src="/static/js/main-app.js"></script>
+</body>
+</html>

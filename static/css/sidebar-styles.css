@@ -1,0 +1,176 @@
+/* Sidebar Styles - Navigation and tool buttons */
+
+/* Modern Sidebar */
+.sidebar {
+    width: 180px;
+    background: linear-gradient(180deg, #16213e 0%, #1a1a2e 100%);
+    padding: 12px;
+    overflow-y: auto;
+    border-right: 1px solid rgba(0, 204, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sidebar-header {
+    height: 40px;
+    background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar-section {
+    background: linear-gradient(135deg, #252545 0%, #1e2a54 100%);
+    border-radius: 12px;
+    margin: 8px 4px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.data-scrapers h3 {
+    color: #00aaff;
+}
+
+.social-media h3 {
+    color: #ff6b9d;
+}
+
+/* Modern rounded 3D buttons */
+.sidebar-btn {
+    width: 100px;
+    height: 32px;
+    margin: 6px auto;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.sidebar-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.sidebar-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    filter: brightness(1.1);
+}
+
+.sidebar-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Data Scraper buttons with gradients */
+.best-sellers-btn {
+    background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+    color: white;
+}
+
+.best-sellers-btn:hover:not(:disabled) {
+    box-shadow: 0 6px 12px rgba(0, 102, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.featured-btn {
+    background: linear-gradient(135deg, #0099ff 0%, #00ccff 100%);
+    color: white;
+}
+
+.featured-btn:hover:not(:disabled) {
+    box-shadow: 0 6px 12px rgba(0, 153, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.custom-url-btn {
+    background: linear-gradient(135deg, #00ccff 0%, #00ffaa 100%);
+    color: white;
+}
+
+.custom-url-btn:hover:not(:disabled) {
+    box-shadow: 0 6px 12px rgba(0, 204, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* Social Media buttons with brand colors */
+.instagram-btn {
+    background: linear-gradient(135deg, #e4405f 0%, #ff6b9d 100%);
+    color: white;
+}
+
+.instagram-btn:hover {
+    box-shadow: 0 6px 12px rgba(228, 64, 95, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.facebook-btn {
+    background: linear-gradient(135deg, #1877f2 0%, #42a5f5 100%);
+    color: white;
+}
+
+.facebook-btn:hover {
+    box-shadow: 0 6px 12px rgba(24, 119, 242, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.youtube-btn {
+    background: linear-gradient(135deg, #ff0000 0%, #ff4444 100%);
+    color: white;
+}
+
+.youtube-btn:hover {
+    box-shadow: 0 6px 12px rgba(255, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.reddit-btn {
+    background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+    color: white;
+}
+
+.reddit-btn:hover {
+    box-shadow: 0 6px 12px rgba(255, 69, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.discord-btn {
+    background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+    color: white;
+}
+
+.discord-btn:hover {
+    box-shadow: 0 6px 12px rgba(88, 101, 242, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.website-btn {
+    background: linear-gradient(135deg, #00c851 0%, #00d4aa 100%);
+    color: white;
+}
+
+.website-btn:hover {
+    box-shadow: 0 6px 12px rgba(0, 200, 81, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+

@@ -1,0 +1,223 @@
+/* Main Styles - Core layout and base styling */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+    color: #ffffff;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header with gradient and modern styling */
+.header {
+    height: 60px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(0, 204, 255, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+}
+
+.header-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.header-btn {
+    padding: 8px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    height: 36px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.delete-temp-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+}
+
+.delete-temp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    filter: brightness(1.1);
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    color: white;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(108, 92, 231, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    filter: brightness(1.1);
+}
+
+/* Main container with responsive design */
+.main-container {
+    display: flex;
+    height: calc(100vh - 60px - 30px);
+    transition: all 0.3s ease;
+}
+
+/* Modern Content area */
+.content-area {
+    flex: 1;
+    background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px 0 0 0;
+}
+
+/* Enhanced Status bar */
+.status-bar {
+    height: 30px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-top: 1px solid rgba(0, 204, 255, 0.2);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.status-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #00ccff;
+}
+
+/* Modern Progress Overlay */
+.progress-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: none;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-container {
+    background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
+    border: 2px solid rgba(0, 204, 255, 0.5);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+}
+
+.progress-title {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 25px;
+}
+
+.progress-bar-container {
+    background: rgba(42, 58, 100, 0.6);
+    border-radius: 15px;
+    height: 24px;
+    margin: 20px 0;
+    overflow: hidden;
+    border: 1px solid rgba(0, 204, 255, 0.3);
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00ccff 0%, #0099ff 50%, #00ffaa 100%);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+}
+
+.progress-text {
+    font-size: 15px;
+    color: #ffffff;
+    margin: 15px 0;
+    font-weight: 500;
+}
+
+.progress-details {
+    font-size: 13px;
+    color: #cccccc;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+.progress-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(42, 58, 100, 0.3);
+    border-top: 3px solid #00ccff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* No products message */
+.no-products {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(30, 42, 84, 0.3) 0%, rgba(37, 37, 69, 0.3) 100%);
+    border-radius: 12px;
+    margin: 20px;
+    border: 1px solid rgba(0, 204, 255, 0.1);
+}
+
+.no-products h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.no-products p {
+    color: #cccccc;
+    font-size: 14px;
+}
+

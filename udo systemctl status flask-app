@@ -1,0 +1,16 @@
+[0;1;31m×[0m nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (]8;;file://srv998080/usr/lib/systemd/system/nginx.service/usr/lib/systemd/system/nginx.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: [0;1;31mfailed[0m (Result: exit-code) since Mon 2025-09-08 07:29:19 UTC; 7min ago
+       Docs: ]8;;man:nginx(8)man:nginx(8)]8;;
+        CPU: 6ms
+
+Sep 08 07:29:16 srv998080 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+Sep 08 07:29:16 srv998080 nginx[11038]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Sep 08 07:29:17 srv998080 nginx[11038]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Sep 08 07:29:17 srv998080 nginx[11038]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Sep 08 07:29:18 srv998080 nginx[11038]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Sep 08 07:29:18 srv998080 nginx[11038]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Sep 08 07:29:19 srv998080 nginx[11038]: nginx: [emerg] still could not bind()
+Sep 08 07:29:19 srv998080 systemd[1]: [0;1;39m[0;1;31m[0;1;39mnginx.service: Control process exited, code=exited, status=1/FAILURE[0m
+Sep 08 07:29:19 srv998080 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mnginx.service: Failed with result 'exit-code'.[0m
+Sep 08 07:29:19 srv998080 systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start nginx.service - A high performance web server and a reverse proxy server.[0m

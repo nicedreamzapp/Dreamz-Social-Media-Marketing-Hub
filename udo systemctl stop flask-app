@@ -1,0 +1,18 @@
+○ flask-app.service - Flask Marketing Hub
+     Loaded: loaded (]8;;file://srv998080/etc/systemd/system/flask-app.service/etc/systemd/system/flask-app.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: inactive (dead) since Mon 2025-09-08 07:31:35 UTC; 5min ago
+   Duration: 32min 11.008s
+    Process: 9500 ExecStart=/var/www/tools/new-flask-env/bin/python flask_wrapper.py (code=exited, status=0/SUCCESS)
+   Main PID: 9500 (code=exited, status=0/SUCCESS)
+        CPU: 5.995s
+
+Sep 08 07:26:40 srv998080 python[9839]: 47.208.159.114 - - [08/Sep/2025 07:26:40] "GET /data/products/Replacement_Heater_Coil_Nice_Dreamz_Style_Ceramic/images/image_1.jpeg HTTP/1.1" 304 -
+Sep 08 07:26:40 srv998080 python[9839]: 47.208.159.114 - - [08/Sep/2025 07:26:40] "GET /data/products/14mm_and_18mm_HydraTube_Cool_Water_Filtration_Thic/images/image_1.jpg HTTP/1.1" 304 -
+Sep 08 07:26:40 srv998080 python[9839]: 47.208.159.114 - - [08/Sep/2025 07:26:40] "GET /data/products/iStick_Pico_Plus_75w_Power_Supply_with_Autofire_Fi/images/image_1.jpg HTTP/1.1" 304 -
+Sep 08 07:26:40 srv998080 python[9839]: 47.208.159.114 - - [08/Sep/2025 07:26:40] "POST /api/generate_instagram HTTP/1.1" 200 -
+Sep 08 07:26:41 srv998080 python[9839]: 47.208.159.114 - - [08/Sep/2025 07:26:41] "POST /api/generate_instagram HTTP/1.1" 200 -
+Sep 08 07:26:45 srv998080 python[9839]: 47.208.159.114 - - [08/Sep/2025 07:26:45] "POST /api/generate_instagram HTTP/1.1" 200 -
+Sep 08 07:31:34 srv998080 systemd[1]: Stopping flask-app.service - Flask Marketing Hub...
+Sep 08 07:31:35 srv998080 systemd[1]: flask-app.service: Deactivated successfully.
+Sep 08 07:31:35 srv998080 systemd[1]: Stopped flask-app.service - Flask Marketing Hub.
+Sep 08 07:31:35 srv998080 systemd[1]: flask-app.service: Consumed 5.995s CPU time, 77.2M memory peak, 0B memory swap peak.

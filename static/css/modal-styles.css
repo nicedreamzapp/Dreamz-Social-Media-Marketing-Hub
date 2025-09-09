@@ -1,0 +1,156 @@
+/* Modal Styles - Popup windows and overlays */
+
+/* Enhanced Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
+    margin: 15% auto;
+    padding: 30px;
+    border: 2px solid rgba(0, 204, 255, 0.5);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 450px;
+    color: white;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(42, 58, 100, 0.6);
+    border: 1px solid rgba(0, 204, 255, 0.3);
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    filter: brightness(1.1);
+}
+
+.modal-ok {
+    background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+    color: white;
+}
+
+.modal-cancel {
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+    color: white;
+}
+
+/* Enhanced Alert/Confirm Pop-up */
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: none;
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-container {
+    background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
+    border: 2px solid rgba(0, 204, 255, 0.5);
+    border-radius: 20px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+}
+
+.alert-message {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.alert-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.alert-btn {
+    padding: 10px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.alert-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    filter: brightness(1.1);
+}
+
+.alert-ok {
+    background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+    color: white;
+}
+
+.alert-cancel {
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+    color: white;
+}
+
