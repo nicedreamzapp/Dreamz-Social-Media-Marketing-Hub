@@ -6,8 +6,22 @@ import sys
 import os
 from pathlib import Path
 
-# User credentials
-USERS = {'Divine': 'Adwork'}
+# Try to load environment variables for security
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    ENV_LOADED = True
+except ImportError:
+    ENV_LOADED = False
+
+# User credentials - using environment variables if available (more secure)
+if ENV_LOADED:
+    USERS = {
+        os.getenv('ADMIN_USERNAME', 'Divine'): os.getenv('ADMIN_PASSWORD', 'Adwork')
+    }
+else:
+    # Fallback to hardcoded values if dotenv not available
+    USERS = {'Divine': 'Adwork'}
 
 def setup_app_paths():
     """Setup all necessary paths for the application"""
@@ -103,4 +117,3 @@ def verify_component_availability():
         pass
     
     return availability
-
