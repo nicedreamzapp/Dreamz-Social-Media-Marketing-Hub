@@ -8,9 +8,7 @@ from pathlib import Path
 
 # User credentials for authentication - Updated with Divine/Adwork
 USERS = {
-    'Divine': 'Adwork',
-    'admin': 'DreamzHub2025!',
-    'matthew': 'MatthewDreamz2025!'
+      
 }
 
 def setup_app_paths():
