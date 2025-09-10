@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Post Review - Divine Tribe Marketing Hub</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <title>Reddit Post Review - Divine Tribe Marketing Hub</title>
     <style>
         * {
             margin: 0;
@@ -29,7 +26,7 @@
             align-items: flex-start;
             justify-content: space-between;
             padding: 40px 30px;
-            border-bottom: 1px solid rgba(0, 204, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 69, 0, 0.2);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
@@ -40,11 +37,11 @@
         .header-left h1 {
             font-size: 22px;
             font-weight: 700;
-            background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+            text-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
             margin-bottom: 4px;
         }
 
@@ -76,7 +73,7 @@
         }
 
         .chatgpt-btn {
-            background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
@@ -94,12 +91,12 @@
 
         .chatgpt-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 102, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 12px rgba(255, 69, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
             filter: brightness(1.1);
         }
 
         .launch-btn {
-            background: linear-gradient(135deg, #0099ff 0%, #00ccff 100%);
+            background: linear-gradient(135deg, #FF6347 0%, #FF4500 100%);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
@@ -114,7 +111,7 @@
 
         .launch-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 153, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 12px rgba(255, 69, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
             filter: brightness(1.1);
         }
 
@@ -151,7 +148,7 @@
             width: 600px;
             background: linear-gradient(135deg, #252545 0%, #1e2a54 100%);
             border-radius: 12px;
-            border: 2px solid rgba(0, 212, 255, 0.5);
+            border: 2px solid rgba(255, 69, 0, 0.5);
             margin: 6px;
             display: flex;
             flex-direction: column;
@@ -162,7 +159,7 @@
             height: 50px;
             background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
             border-radius: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.3);
+            border: 1px solid rgba(255, 69, 0, 0.3);
             margin: 8px;
             display: flex;
             align-items: center;
@@ -174,7 +171,7 @@
         .images-title {
             font-size: 16px;
             font-weight: 700;
-            background: linear-gradient(135deg, #00ccff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -209,7 +206,7 @@
         }
 
         .product-page-btn {
-            background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
@@ -227,7 +224,7 @@
 
         .product-page-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 102, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 12px rgba(255, 69, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
             filter: brightness(1.1);
         }
 
@@ -239,31 +236,30 @@
             padding: 8px;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 8px;
             align-content: start;
         }
 
         .image-thumbnail {
             background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(255, 69, 0, 0.2);
             border-radius: 12px;
-            width: 180px;
-            height: 240px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            min-height: 240px;
         }
 
         .image-thumbnail:hover {
-            border-color: rgba(0, 255, 170, 0.6);
+            border-color: rgba(255, 69, 0, 0.6);
             border-width: 2px;
             background: linear-gradient(135deg, #2a3a64 0%, #1e2a54 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 255, 170, 0.2);
+            box-shadow: 0 8px 20px rgba(255, 69, 0, 0.2);
         }
 
         .img-container {
@@ -278,7 +274,7 @@
         .img-container img {
             max-width: 160px;
             max-height: 140px;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 8px;
         }
 
@@ -289,7 +285,7 @@
         }
 
         .download-btn {
-            background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 15px;
@@ -307,13 +303,13 @@
 
         .download-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 102, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(255, 69, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
             filter: brightness(1.1);
         }
 
         .filename-label {
             background: rgba(37, 37, 69, 0.6);
-            color: #00ccff;
+            color: #FF4500;
             font-size: 12px;
             font-weight: 600;
             height: 25px;
@@ -363,7 +359,7 @@
             flex: 1;
             background: linear-gradient(135deg, #252545 0%, #1e2a54 100%);
             border-radius: 12px;
-            border: 2px solid rgba(0, 255, 170, 0.5);
+            border: 2px solid rgba(255, 69, 0, 0.5);
             margin: 6px;
             display: flex;
             flex-direction: column;
@@ -374,7 +370,7 @@
             height: 50px;
             background: linear-gradient(135deg, #1e2a54 0%, #252545 100%);
             border-radius: 12px;
-            border: 1px solid rgba(0, 255, 170, 0.3);
+            border: 1px solid rgba(255, 69, 0, 0.3);
             margin: 8px;
             display: flex;
             align-items: center;
@@ -386,7 +382,7 @@
         .caption-title {
             font-size: 16px;
             font-weight: 700;
-            background: linear-gradient(135deg, #00ffaa 0%, #00ccff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -399,7 +395,7 @@
         }
 
         .copy-caption-btn {
-            background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
@@ -417,14 +413,14 @@
 
         .copy-caption-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 102, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 12px rgba(255, 69, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
             filter: brightness(1.1);
         }
 
         .editor-container {
             flex: 1;
             background: rgba(42, 58, 100, 0.6);
-            border: 1px solid rgba(0, 204, 255, 0.3);
+            border: 1px solid rgba(255, 69, 0, 0.3);
             border-radius: 12px;
             margin: 8px;
             overflow: hidden;
@@ -453,7 +449,7 @@
         }
 
         .caption-text::selection {
-            background: #0066ff;
+            background: #FF4500;
             color: #ffffff;
         }
 
@@ -466,12 +462,12 @@
         }
 
         .caption-text::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #0066ff 0%, #0099ff 100%);
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
             border-radius: 6px;
         }
 
         .caption-text::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #0088ff 0%, #00aaff 100%);
+            background: linear-gradient(135deg, #FF6347 0%, #FF4500 100%);
         }
 
         .tooltip {
@@ -481,7 +477,7 @@
             padding: 10px;
             border-radius: 12px;
             font-size: 14px;
-            border: 1px solid rgba(0, 204, 255, 0.3);
+            border: 1px solid rgba(255, 69, 0, 0.3);
             z-index: 1000;
             max-width: 300px;
             word-wrap: break-word;
@@ -745,30 +741,30 @@
 <body>
     <div class="header">
         <div class="header-left">
-            <h1>Instagram Post Review</h1>
+            <h1>Reddit Post Review</h1>
             <p>Product: {{ product.title }}</p>
         </div>
         
         <div class="header-right">
             <div class="buttons-container">
                 <div class="top-buttons">
-                    <button class="chatgpt-btn" onclick="openChatGPT('engaging')"
-                            title="Creates authentic, attention-grabbing captions that connect with users naturally">
-                        Engaging
+                    <button class="chatgpt-btn" onclick="openChatGPT('discussion')"
+                            title="Ask 3 questions then create a discussion-focused Reddit post that starts genuine conversations">
+                        Discussion
                     </button>
-                    <button class="chatgpt-btn" onclick="openChatGPT('lifestyle')"
-                            title="Focuses on lifestyle benefits and emotional connection without being condescending">
-                        Lifestyle
+                    <button class="chatgpt-btn" onclick="openChatGPT('review')"
+                            title="Ask 3 questions then create an honest Reddit review that reads like genuine user experience">
+                        Review
                     </button>
-                    <button class="chatgpt-btn" onclick="openChatGPT('promotional')"
-                            title="Highlights features and value professionally without being pushy or insulting">
-                        Promotional
+                    <button class="chatgpt-btn" onclick="openChatGPT('educational')"
+                            title="Ask 3 questions then create an educational Reddit post that teaches valuable insights">
+                        Educational
                     </button>
                 </div>
                 
                 <div class="bottom-buttons">
-                    <button class="launch-btn" onclick="launchInstagram()">
-                        Launch Instagram
+                    <button class="launch-btn" onclick="launchReddit()">
+                        Launch Reddit
                     </button>
                     <button class="cancel-btn" onclick="window.close()">
                         Cancel
@@ -781,7 +777,7 @@
     <div class="main-container">
         <div class="left-frame">
             <div class="images-header">
-                <div class="images-title">Instagram Images - Click to View</div>
+                <div class="images-title">Reddit Images - Click to View</div>
                 <div class="header-buttons">
                     <button class="download-all-btn" onclick="downloadAllImages()">
                         Download All
@@ -793,12 +789,12 @@
             </div>
             
             <div class="images-scroll" id="images-scroll">
-                {% if post_data.all_instagram_images and post_data.all_instagram_images|length > 0 %}
-                    {% for image_path in post_data.all_instagram_images %}
+                {% if post_data.all_reddit_images and post_data.all_reddit_images|length > 0 %}
+                    {% for image_path in post_data.all_reddit_images %}
                         <div class="image-thumbnail">
                             <div class="img-container" onclick="openImage('{{ image_path }}')">
                                 <img src="/temp_ads/{{ image_path.split('/')[-1] }}"
-                                     alt="Instagram Image"
+                                     alt="Reddit Image"
                                      onerror="this.parentElement.innerHTML='<div class=\'error-thumbnail\'>Image Not Found</div>'">
                             </div>
                             <div class="image-controls">
@@ -832,7 +828,7 @@
             
             <div class="editor-container">
                 <div class="text-container">
-                    <textarea class="caption-text" id="caption-text" data-cache-buster="{{ cache_buster or '' }}"
+                    <textarea class="caption-text" id="caption-text"
                               placeholder="Caption will appear here...">{{ post_data.caption or '' }}</textarea>
                 </div>
             </div>
@@ -843,7 +839,7 @@
 
     <!-- Include ChatGPT Integration Scripts -->
     <script src="/static/js/chatgpt_core.js"></script>
-    <script src="/static/js/chatgpt_instagram.js"></script>
+    <script src="/static/js/chatgpt_reddit.js"></script>
     <script>
         // Initialize with current product data
         const CURRENT_PRODUCT_DATA = {
@@ -860,8 +856,8 @@
                 sessionStorage.clear();
             }
             
-            // Initialize Instagram ChatGPT integration
-            window.InstagramChatGPT.init(CURRENT_PRODUCT_DATA);
+            // Initialize Reddit ChatGPT integration
+            window.RedditChatGPT.init(CURRENT_PRODUCT_DATA);
             
             // Force refresh textarea with current product data
             const textarea = document.getElementById('caption-text');
@@ -901,17 +897,17 @@
             }
         }
 
-        function launchInstagram() {
+        function launchReddit() {
             try {
                 const captionContent = document.getElementById('caption-text').value;
                 navigator.clipboard.writeText(captionContent);
                 
-                window.open('https://www.instagram.com/', '_blank');
-                console.log('Instagram launched, caption copied');
+                window.open('https://www.reddit.com/submit', '_blank');
+                console.log('Reddit launched, caption copied');
                 
             } catch (error) {
-                console.error('Failed to launch Instagram:', error);
-                alert('Failed to launch Instagram');
+                console.error('Failed to launch Reddit:', error);
+                alert('Failed to launch Reddit');
             }
         }
 
@@ -971,7 +967,7 @@
                         console.log(`Downloaded ${downloadCount}/${imageElements.length}: ${filename}`);
                         
                         if (downloadCount === imageElements.length) {
-                            alert(`Downloaded all ${downloadCount} Instagram images!`);
+                            alert(`Downloaded all ${downloadCount} Reddit images!`);
                         }
                     }, index * 500);
                 });

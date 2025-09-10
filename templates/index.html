@@ -9,6 +9,98 @@
     <link rel="stylesheet" href="/static/css/product-styles.css">
     <link rel="stylesheet" href="/static/css/modal-styles.css">
     <link rel="stylesheet" href="/static/css/responsive.css">
+    <style>
+        /* Mobile button text fix */
+        @media (max-width: 768px) {
+            .sidebar-btn {
+                font-size: 10px !important;
+                padding: 6px 4px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.1 !important;
+                height: auto !important;
+                min-height: 35px !important;
+            }
+            
+            .sidebar-btn.best-sellers-btn,
+            .sidebar-btn.featured-btn,
+            .sidebar-btn.custom-url-btn {
+                font-size: 9px !important;
+                padding: 5px 3px !important;
+                min-height: 32px !important;
+            }
+            
+            .sidebar-btn.instagram-btn,
+            .sidebar-btn.facebook-btn,
+            .sidebar-btn.youtube-btn,
+            .sidebar-btn.reddit-btn,
+            .sidebar-btn.twitter-btn,
+            .sidebar-btn.discord-btn,
+            .sidebar-btn.website-btn {
+                font-size: 8px !important;
+                padding: 4px 2px !important;
+                min-height: 30px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sidebar-btn {
+                font-size: 8px !important;
+                padding: 4px 2px !important;
+                line-height: 1.0 !important;
+                min-height: 28px !important;
+            }
+            
+            .sidebar-btn.best-sellers-btn,
+            .sidebar-btn.featured-btn,
+            .sidebar-btn.custom-url-btn {
+                font-size: 7px !important;
+                padding: 3px 2px !important;
+                min-height: 26px !important;
+            }
+            
+            .sidebar-btn.instagram-btn,
+            .sidebar-btn.facebook-btn,
+            .sidebar-btn.youtube-btn,
+            .sidebar-btn.reddit-btn,
+            .sidebar-btn.twitter-btn,
+            .sidebar-btn.discord-btn,
+            .sidebar-btn.website-btn {
+                font-size: 6px !important;
+                padding: 3px 1px !important;
+                min-height: 24px !important;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .sidebar-btn {
+                font-size: 7px !important;
+                padding: 3px 1px !important;
+                min-height: 24px !important;
+            }
+            
+            .sidebar-btn.best-sellers-btn,
+            .sidebar-btn.featured-btn,
+            .sidebar-btn.custom-url-btn {
+                font-size: 6px !important;
+                padding: 2px 1px !important;
+                min-height: 22px !important;
+            }
+            
+            .sidebar-btn.instagram-btn,
+            .sidebar-btn.facebook-btn,
+            .sidebar-btn.youtube-btn,
+            .sidebar-btn.reddit-btn,
+            .sidebar-btn.twitter-btn,
+            .sidebar-btn.discord-btn,
+            .sidebar-btn.website-btn {
+                font-size: 5px !important;
+                padding: 2px 1px !important;
+                min-height: 20px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Modern Progress Overlay -->
@@ -44,24 +136,36 @@
             <!-- Data Scrapers section -->
             <div class="sidebar-section data-scrapers">
                 <h3>📊 Data Scrapers</h3>
+                
+                <!-- ONLY ADDITION: Site Selection Dropdown -->
+                <div class="site-selection" style="margin-bottom: 15px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                    <select id="site-selector" style="width: 100%; padding: 6px; border: none; border-radius: 3px; font-size: 13px;">
+                        <option value="ineedhemp">INeed Hemp</option>
+                        <option value="nicedreamz">Nice Dreamz Wholesale</option>
+                        <option value="tribeseed">Tribe Seed Bank</option>
+                    </select>
+                </div>
+                
+                <!-- Original buttons - unchanged -->
                 <button class="sidebar-btn best-sellers-btn" id="best-sellers-btn" onclick="scrapeBestSellers()">🏆 Best Sellers</button>
                 <button class="sidebar-btn featured-btn" id="featured-btn" onclick="scrapeFeatured()">⭐ Featured</button>
                 <button class="sidebar-btn custom-url-btn" id="custom-url-btn" onclick="showCustomUrlModal()">🔗 Custom URL</button>
             </div>
             
-            <!-- Social Media section -->
+            <!-- Social Media section - UPDATED Twitter button -->
             <div class="sidebar-section social-media">
                 <h3>📱 Social Media</h3>
                 <button class="sidebar-btn instagram-btn" onclick="generateInstagram()">📸 Instagram</button>
                 <button class="sidebar-btn facebook-btn" onclick="generateFacebook()">📘 Facebook</button>
                 <button class="sidebar-btn youtube-btn" onclick="showComingSoon('YouTube')">📺 YouTube</button>
-                <button class="sidebar-btn reddit-btn" onclick="showComingSoon('Reddit')">🤖 Reddit</button>
+                <button class="sidebar-btn reddit-btn" onclick="generateReddit()">🤖 Reddit</button>
+                <button class="sidebar-btn twitter-btn" onclick="generateTwitter()">🐦 Twitter</button>
                 <button class="sidebar-btn discord-btn" onclick="showComingSoon('Discord')">💬 Discord</button>
                 <button class="sidebar-btn website-btn" onclick="showComingSoon('Website')">🌐 Website</button>
             </div>
         </div>
 
-        <!-- Enhanced Content area -->
+        <!-- Enhanced Content area - unchanged -->
         <div class="content-area">
             <div class="products-header">
                 <div class="products-title">🛍️ Product Gallery</div>
@@ -76,12 +180,12 @@
         </div>
     </div>
 
-    <!-- Enhanced Status bar -->
+    <!-- Enhanced Status bar - unchanged -->
     <div class="status-bar">
         <div class="status-text" id="status-text">✅ Ready</div>
     </div>
 
-    <!-- Enhanced Custom URL Modal -->
+    <!-- Enhanced Custom URL Modal - unchanged -->
     <div id="custom-url-modal" class="modal">
         <div class="modal-content">
             <h3>🔗 Custom URL Scraper</h3>
@@ -93,7 +197,7 @@
         </div>
     </div>
 
-    <!-- Enhanced Alert/Confirm Pop-up -->
+    <!-- Enhanced Alert/Confirm Pop-up - unchanged -->
     <div id="alert-overlay" class="alert-overlay">
         <div class="alert-container">
             <div class="alert-message" id="alert-message"></div>
@@ -101,12 +205,20 @@
         </div>
     </div>
 
-    <!-- JavaScript Files -->
+    <!-- JavaScript Files - unchanged -->
     <script src="/static/js/app-state.js"></script>
     <script src="/static/js/api-calls.js"></script>
     <script src="/static/js/ui-handlers.js"></script>
     <script src="/static/js/modal-handlers.js"></script>
     <script src="/static/js/file-handlers.js"></script>
     <script src="/static/js/main-app.js"></script>
+
+    <!-- ONLY ADDITION: Helper function for getting selected site -->
+    <script>
+        function getSelectedSite() {
+            const selector = document.getElementById('site-selector');
+            return selector ? selector.value : 'ineedhemp';
+        }
+    </script>
 </body>
 </html>

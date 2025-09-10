@@ -190,4 +190,3 @@ document.getElementById('alert-overlay').addEventListener('click', function(even
         resolveAlert(false);
     }
 });
-

@@ -1,6 +1,6 @@
-/* API Calls - Server communication and data fetching */
+/* API Calls - Server communication and data fetching - FIXED VERSION with Cache Busting */
 
-// ACCURATE Progress tracking - polls server for real status
+// Progress tracking - polls server for real status
 function showProgress(title, details) {
     document.getElementById('progress-title').textContent = title;
     document.getElementById('progress-details').textContent = details;
@@ -8,6 +8,7 @@ function showProgress(title, details) {
     document.getElementById('progress-bar').style.width = '0%';
     document.getElementById('progress-overlay').style.display = 'flex';
     updateStatus('⏳ Downloading...');
+    
     // Disable scraper buttons
     document.getElementById('best-sellers-btn').disabled = true;
     document.getElementById('featured-btn').disabled = true;
@@ -22,6 +23,7 @@ function startProgressPolling() {
             const response = await fetch('/api/scraping_status');
             const data = await response.json();
             console.log('Scraping status:', data);
+            
             if (data.active) {
                 updateProgress(data.progress || 0, data.message || 'Scraping in progress...');
                 updateStatus('⏳ Downloading...');
@@ -29,23 +31,15 @@ function startProgressPolling() {
                 updateProgress(100, 'Complete!');
                 setTimeout(() => {
                     hideProgress();
+                    // FIXED: Only reload products AFTER scraping is done
                     loadProducts();
                     updateStatus('✅ Ready');
                 }, 1000);
             }
         } catch (error) {
-            console.log('Status endpoint error, using fallback:', error);
-            const originalCount = products.length;
-            await loadProducts();
-            if (products.length > originalCount) {
-                updateProgress(100, 'Complete!');
-                setTimeout(() => {
-                    hideProgress();
-                    updateStatus('✅ Ready');
-                }, 1000);
-            } else {
-                updateStatus('⏳ Downloading...');
-            }
+            console.log('Status endpoint error:', error);
+            // REMOVED: duplicate loadProducts() call from fallback
+            updateStatus('⏳ Downloading...');
         }
     }, 2000);
 }
@@ -67,17 +61,30 @@ function updateProgress(percentage, text) {
     document.getElementById('progress-text').textContent = text;
 }
 
-// Scraper functions with accurate progress
+// NEW: Get selected site from dropdown
+function getSelectedSite() {
+    const selector = document.getElementById('site-selector');
+    return selector ? selector.value : 'ineedhemp';
+}
+
+// UPDATED: Best Sellers scraper with site selection
 async function scrapeBestSellers() {
     if (isScrapingActive) return;
-    updateStatus('🚀 Starting Best Sellers scraper...');
-    showProgress('Scraping Best Sellers', 'Downloading top 15 best selling products and their images from the website.');
+    
+    const selectedSite = getSelectedSite();
+    const siteName = document.getElementById('site-selector').options[document.getElementById('site-selector').selectedIndex].text;
+    
+    updateStatus(`🚀 Starting Best Sellers scraper for ${siteName}...`);
+    showProgress('Scraping Best Sellers', `Downloading top 15 best selling products from ${siteName} and their images.`);
+    
     try {
         const response = await fetch('/api/scrape_best_sellers', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ site: selectedSite })
         });
         const data = await response.json();
+        
         if (data.success) {
             updateStatus('⏳ Downloading...');
         } else {
@@ -96,16 +103,24 @@ async function scrapeBestSellers() {
     }
 }
 
+// UPDATED: Featured Products scraper with site selection
 async function scrapeFeatured() {
     if (isScrapingActive) return;
-    updateStatus('🚀 Starting Featured Products scraper...');
-    showProgress('Scraping Featured Products', 'Downloading up to 20 featured products and their images from the website.');
+    
+    const selectedSite = getSelectedSite();
+    const siteName = document.getElementById('site-selector').options[document.getElementById('site-selector').selectedIndex].text;
+    
+    updateStatus(`🚀 Starting Featured Products scraper for ${siteName}...`);
+    showProgress('Scraping Featured Products', `Downloading up to 20 featured products from ${siteName} and their images.`);
+    
     try {
         const response = await fetch('/api/scrape_featured', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ site: selectedSite })
         });
         const data = await response.json();
+        
         if (data.success) {
             updateStatus('⏳ Downloading...');
         } else {
@@ -124,15 +139,18 @@ async function scrapeFeatured() {
     }
 }
 
+// Custom URL scraper - unchanged but cleaned up
 async function scrapeCustomUrl() {
     const url = document.getElementById('custom-url-input').value.trim();
     if (!url) {
         await showAlert('Please enter a URL');
         return;
     }
+    
     hideCustomUrlModal();
     updateStatus('🚀 Starting custom URL scraper...');
     showProgress('Scraping Custom URL', `Downloading product data and images from: ${url}`);
+    
     try {
         const response = await fetch('/api/scrape_custom', {
             method: 'POST',
@@ -140,6 +158,7 @@ async function scrapeCustomUrl() {
             body: JSON.stringify({ url: url })
         });
         const data = await response.json();
+        
         if (data.success) {
             updateStatus('⏳ Downloading...');
         } else {
@@ -158,7 +177,7 @@ async function scrapeCustomUrl() {
     }
 }
 
-// Instagram generation
+// FIXED: Instagram generation with aggressive cache busting
 async function generateInstagram() {
     if (selectedProductIndex === null) {
         await showAlert('Please select a product first by clicking on it!');
@@ -174,7 +193,10 @@ async function generateInstagram() {
         const data = await response.json();
         if (data.success) {
             updateStatus('✅ Instagram post generated successfully!');
-            const reviewUrl = `/instagram_review/${selectedProductIndex}`;
+            // CACHE BUSTING: Add timestamp and random number to force fresh page load
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(7);
+            const reviewUrl = `/instagram_review/${selectedProductIndex}?bust=${timestamp}&r=${random}`;
             window.open(reviewUrl, '_blank');
         } else {
             updateStatus('❌ Error: ' + data.error);
@@ -184,7 +206,7 @@ async function generateInstagram() {
     }
 }
 
-// Facebook generation
+// FIXED: Facebook generation with aggressive cache busting
 async function generateFacebook() {
     if (selectedProductIndex === null) {
         await showAlert('Please select a product first by clicking on it!');
@@ -200,13 +222,74 @@ async function generateFacebook() {
         const data = await response.json();
         if (data.success) {
             updateStatus('✅ Facebook post generated successfully!');
-            const reviewUrl = `/facebook_review/${selectedProductIndex}`;
+            // CACHE BUSTING: Add timestamp and random number to force fresh page load
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(7);
+            const reviewUrl = `/facebook_review/${selectedProductIndex}?bust=${timestamp}&r=${random}`;
             window.open(reviewUrl, '_blank');
         } else {
             updateStatus('❌ Error: ' + data.error);
         }
     } catch (error) {
         updateStatus('❌ Facebook generation failed: ' + error.message);
+    }
+}
+
+// FIXED: Reddit generation with aggressive cache busting
+async function generateReddit() {
+    if (selectedProductIndex === null) {
+        await showAlert('Please select a product first by clicking on it!');
+        return;
+    }
+    updateStatus('🤖 Generating Reddit post...');
+    try {
+        const response = await fetch('/api/generate_reddit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_index: selectedProductIndex })
+        });
+        const data = await response.json();
+        if (data.success) {
+            updateStatus('✅ Reddit post generated successfully!');
+            // CACHE BUSTING: Add timestamp and random number to force fresh page load
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(7);
+            const reviewUrl = `/reddit_review/${selectedProductIndex}?bust=${timestamp}&r=${random}`;
+            window.open(reviewUrl, '_blank');
+        } else {
+            updateStatus('❌ Error: ' + data.error);
+        }
+    } catch (error) {
+        updateStatus('❌ Reddit generation failed: ' + error.message);
+    }
+}
+
+// FIXED: Twitter generation with aggressive cache busting
+async function generateTwitter() {
+    if (selectedProductIndex === null) {
+        await showAlert('Please select a product first by clicking on it!');
+        return;
+    }
+    updateStatus('🐦 Generating Twitter post...');
+    try {
+        const response = await fetch('/api/generate_twitter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_index: selectedProductIndex })
+        });
+        const data = await response.json();
+        if (data.success) {
+            updateStatus('✅ Twitter post generated successfully!');
+            // CACHE BUSTING: Add timestamp and random number to force fresh page load
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(7);
+            const reviewUrl = `/twitter_review/${selectedProductIndex}?bust=${timestamp}&r=${random}`;
+            window.open(reviewUrl, '_blank');
+        } else {
+            updateStatus('❌ Error: ' + data.error);
+        }
+    } catch (error) {
+        updateStatus('❌ Twitter generation failed: ' + error.message);
     }
 }
 
@@ -223,6 +306,7 @@ async function deleteProduct(index) {
         const data = await response.json();
         if (data.success) {
             updateStatus(`✅ Product deleted! ${data.remaining_products} products remaining.`);
+            // FIXED: Only reload products after successful deletion
             loadProducts();
         } else {
             updateStatus('❌ Error: ' + data.error);
@@ -253,4 +337,3 @@ async function clearTemp() {
 function showComingSoon(platform) {
     showAlert(`${platform} post creator coming soon!`);
 }
-

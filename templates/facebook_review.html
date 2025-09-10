@@ -487,9 +487,254 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        /* Mobile responsive styles remain the same as Instagram but with Facebook colors */
         @media (max-width: 768px) {
-            /* Same mobile styles but with Facebook blue colors */
+            body {
+                overflow-y: auto;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .header {
+                height: auto;
+                min-height: 210px;
+                padding: 20px 12px 40px 12px;
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .header-left {
+                text-align: center;
+            }
+
+            .header-left h1 {
+                font-size: 18px;
+            }
+
+            .header-left p {
+                font-size: 12px;
+            }
+
+            .header-right {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+                width: 100%;
+            }
+
+            .buttons-container {
+                width: 100%;
+                min-width: auto;
+                gap: 8px;
+                padding-bottom: 30px;
+            }
+
+            .top-buttons, .bottom-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 6px;
+                width: 100%;
+            }
+
+            .chatgpt-btn {
+                width: 100px;
+                height: 34px;
+                font-size: 11px;
+            }
+
+            .launch-btn {
+                width: 120px;
+                height: 34px;
+                font-size: 11px;
+            }
+
+            .cancel-btn {
+                width: 70px;
+                height: 34px;
+                font-size: 11px;
+            }
+
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                margin: 0 4px;
+                gap: 4px;
+            }
+
+            .left-frame {
+                width: 100%;
+                margin: 4px;
+                order: 1;
+            }
+
+            .right-frame {
+                width: 100%;
+                margin: 4px;
+                order: 2;
+                min-height: 400px;
+            }
+
+            .images-header {
+                height: 45px;
+                margin: 6px;
+                padding: 0 12px;
+            }
+
+            .images-title {
+                font-size: 14px;
+            }
+
+            .header-buttons {
+                gap: 6px;
+            }
+
+            .download-all-btn, .product-page-btn {
+                width: 80px;
+                height: 26px;
+                font-size: 10px;
+            }
+
+            .images-scroll {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                margin: 0 6px 6px 6px;
+                padding: 6px;
+                max-height: 400px;
+            }
+
+            .image-thumbnail {
+                width: 100%;
+                height: 200px;
+            }
+
+            .img-container img {
+                max-width: 140px;
+                max-height: 120px;
+            }
+
+            .download-btn {
+                width: 60px;
+                height: 18px;
+                font-size: 9px;
+            }
+
+            .filename-label {
+                font-size: 10px;
+                height: 22px;
+            }
+
+            .caption-header {
+                height: 45px;
+                margin: 6px;
+                padding: 0 12px;
+            }
+
+            .caption-title {
+                font-size: 14px;
+            }
+
+            .header-controls {
+                gap: 10px;
+            }
+
+            .copy-caption-btn {
+                width: 80px;
+                height: 26px;
+                font-size: 10px;
+            }
+
+            .editor-container {
+                margin: 6px;
+                min-height: 350px !important;
+                height: auto !important;
+                overflow: hidden;
+            }
+
+            .text-container {
+                padding: 10px;
+                height: 100%;
+                min-height: 330px;
+            }
+
+            .caption-text {
+                font-size: 13px;
+                height: 100% !important;
+                min-height: 330px;
+                overflow-y: auto !important;
+                white-space: pre-wrap !important;
+                word-wrap: break-word !important;
+            }
+
+            .tooltip {
+                font-size: 12px;
+                padding: 8px;
+                max-width: 250px;
+            }
+
+            .no-images {
+                padding: 20px;
+                margin: 15px;
+            }
+
+            .no-images h3 {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 8px 40px 8px;
+                min-height: 233px;
+            }
+
+            .buttons-container {
+                padding-bottom: 30px;
+            }
+
+            .images-scroll {
+                grid-template-columns: 1fr;
+            }
+
+            .image-thumbnail {
+                height: 180px;
+            }
+
+            .chatgpt-btn {
+                width: 90px;
+                font-size: 10px;
+            }
+
+            .launch-btn {
+                width: 110px;
+                font-size: 10px;
+            }
+
+            .editor-container {
+                min-height: 400px !important;
+            }
+
+            .text-container {
+                min-height: 380px;
+            }
+
+            .caption-text {
+                min-height: 380px;
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .chatgpt-btn, .launch-btn, .cancel-btn, .download-all-btn, .product-page-btn, .copy-caption-btn {
+                min-height: 36px;
+            }
+
+            .download-btn {
+                min-height: 24px;
+                width: 70px;
+            }
+
+            .image-thumbnail {
+                min-height: 200px;
+            }
         }
     </style>
 </head>
@@ -532,7 +777,7 @@
     <div class="main-container">
         <div class="left-frame">
             <div class="images-header">
-                <div class="images-title">Facebook Images - Original Sizes</div>
+                <div class="images-title">Facebook Images - Click to View</div>
                 <div class="header-buttons">
                     <button class="download-all-btn" onclick="downloadAllImages()">
                         Download All
@@ -592,40 +837,34 @@
 
     <div id="tooltip" class="tooltip"></div>
 
+    <!-- Include ChatGPT Integration Scripts -->
+    <script src="/static/js/chatgpt_core.js"></script>
+    <script src="/static/js/chatgpt_facebook.js"></script>
     <script>
-        const chatgptPrompts = {
-            'story': `Before creating a Facebook post, ask me these 3 short questions:
-1. What's the main benefit this product offers users?
-2. Is this product better for beginners or experienced concentrate users?  
-3. What's the standout feature that makes this product unique?
-
-After I answer, create a story-driven Facebook business post (200-250 words) that tells a brief story about the product, focuses on the benefits and features I identified, and includes a natural call-to-action. Keep cannabis terminology minimal and professional. Include 3-5 relevant hashtags.
-
-Product Information:
-{product_text}`,
-
-            'educational': `Before creating a Facebook post, ask me these 3 short questions:
-1. What's the main benefit this product offers users?
-2. Is this product better for beginners or experienced concentrate users?
-3. What's the standout feature that makes this product unique?
-
-After I answer, create an educational Facebook business post (200-250 words) that teaches something valuable about the product or how to use it effectively. Focus on solving problems or answering common questions. Keep cannabis terminology minimal and professional. Include a helpful call-to-action and 3-5 relevant hashtags.
-
-Product Information:
-{product_text}`,
-
-            'community': `Before creating a Facebook post, ask me these 3 short questions:
-1. What's the main benefit this product offers users?
-2. Is this product better for beginners or experienced concentrate users?
-3. What's the standout feature that makes this product unique?
-
-After I answer, create a community-building Facebook post (200-250 words) that encourages engagement and interaction. Ask questions, share relatable experiences, or highlight how this product brings people together. Keep cannabis terminology minimal and professional. Include 3-5 relevant hashtags and encourage comments.
-
-Product Information:
-{product_text}`
+        // Initialize with current product data
+        const CURRENT_PRODUCT_DATA = {
+            title: {{ product.title|tojson }},
+            url: {{ product.url|tojson }},
+            caption: {{ post_data.caption|tojson }},
+            cacheBuster: {{ cache_buster|tojson or 'null' }}
         };
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Clear Brave browser cache
+            if (navigator.userAgent.includes("Brave") || navigator.brave) {
+                localStorage.clear();
+                sessionStorage.clear();
+            }
+            
+            // Initialize Facebook ChatGPT integration
+            window.FacebookChatGPT.init(CURRENT_PRODUCT_DATA);
+            
+            // Force refresh textarea with current product data
+            const textarea = document.getElementById('caption-text');
+            if (textarea && CURRENT_PRODUCT_DATA.caption) {
+                textarea.value = CURRENT_PRODUCT_DATA.caption;
+            }
+            
             setupEventListeners();
         });
 
@@ -639,34 +878,6 @@ Product Information:
                 });
                 element.addEventListener('mouseleave', hideTooltip);
             });
-        }
-
-        function openChatGPT(promptType) {
-            try {
-                const productText = document.getElementById('caption-text').value;
-                
-                if (!productText.trim()) {
-                    alert('Please enter some caption content first');
-                    return;
-                }
-                
-                const promptTemplate = chatgptPrompts[promptType];
-                if (!promptTemplate) {
-                    alert('Invalid prompt type');
-                    return;
-                }
-                
-                const fullPrompt = promptTemplate.replace('{product_text}', productText);
-                const encodedPrompt = encodeURIComponent(fullPrompt);
-                const chatgptUrl = `https://chat.openai.com/?q=${encodedPrompt}`;
-                
-                window.open(chatgptUrl, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
-                console.log(`ChatGPT ${promptType} opened in new window`);
-                
-            } catch (error) {
-                console.error('Failed to open ChatGPT:', error);
-                alert('Failed to open ChatGPT');
-            }
         }
 
         function copyCaptionToClipboard() {
@@ -701,7 +912,7 @@ Product Information:
         }
 
         function openProductPage() {
-            const productUrl = '{{ product.url or "" }}';
+            const productUrl = CURRENT_PRODUCT_DATA.url;
             if (productUrl) {
                 window.open(productUrl, '_blank');
             } else {
@@ -806,4 +1017,3 @@ Product Information:
     </script>
 </body>
 </html>
-

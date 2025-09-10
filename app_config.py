@@ -1,119 +1,179 @@
 """
-Application Configuration - Setup paths and initialize components
-Handles import logic and component initialization for Flask app
+App Configuration - Universal WooCommerce Support
+Handles path setup, component initialization, and user management
 """
-import sys
 import os
+import sys
 from pathlib import Path
 
-# Try to load environment variables for security
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-    ENV_LOADED = True
-except ImportError:
-    ENV_LOADED = False
-
-# User credentials - using environment variables if available (more secure)
-if ENV_LOADED:
-    USERS = {
-        os.getenv('ADMIN_USERNAME', 'Divine'): os.getenv('ADMIN_PASSWORD', 'Adwork')
-    }
-else:
-    # Fallback to hardcoded values if dotenv not available
-    USERS = {'Divine': 'Adwork'}
+# User credentials for authentication - Updated with Divine/Adwork
+USERS = {
+    'Divine': 'Adwork',
+    'admin': 'DreamzHub2025!',
+    'matthew': 'MatthewDreamz2025!'
+}
 
 def setup_app_paths():
-    """Setup all necessary paths for the application"""
-    current_dir = Path(__file__).parent
+    """Setup application paths for VPS environment"""
+    base_dir = Path('/var/www/tools')
     
-    # Add all necessary paths to sys.path
-    paths_to_add = [
-        str(current_dir),
-        str(current_dir / "core"),
-        str(current_dir / "core" / "scrapers"),
-        str(current_dir / "core" / "generators"),
-        str(current_dir / "core" / "processors"),
-        str(current_dir / "core" / "utils"),
-        str(current_dir / "platforms" / "instagram"),
-        str(current_dir / "ui"),
-        str(current_dir / "ui" / "components"),
-        str(current_dir / "data"),
+    # Ensure all required directories exist
+    required_dirs = [
+        base_dir / 'data',
+        base_dir / 'data' / 'products',
+        base_dir / 'temp_ads',
+        base_dir / 'temp_ads' / 'instagram',
+        base_dir / 'temp_ads' / 'facebook',
+        base_dir / 'static' / 'css',
+        base_dir / 'static' / 'js',
+        base_dir / 'templates'
     ]
     
-    for path in paths_to_add:
-        if path not in sys.path:
-            sys.path.append(path)
+    for directory in required_dirs:
+        directory.mkdir(parents=True, exist_ok=True)
     
-    print("✅ Application paths configured")
+    # Add base directory to Python path if not already there
+    base_str = str(base_dir)
+    if base_str not in sys.path:
+        sys.path.insert(0, base_str)
+    
+    print(f"✅ App paths configured: {base_dir}")
+    return base_dir
 
 def initialize_components():
-    """Initialize scraper and Instagram generator components"""
-    
-    # Try to import unified scraper
+    """Initialize scraper and generator components with error handling"""
     scraper_module = None
+    instagram_generator_module = None
+    
+    # Try to import scraper module
     try:
         import unified_scraper
-        print("✅ Unified scraper imported successfully")
         scraper_module = unified_scraper
+        print("✅ Universal scraper module loaded")
     except ImportError as e:
-        print(f"❌ Unified scraper import error: {e}")
+        print(f"❌ Scraper import error: {e}")
+    except Exception as e:
+        print(f"❌ Scraper initialization error: {e}")
     
     # Try to import Instagram generator
-    instagram_module = None
     try:
         import instagram_generator
-        print("✅ Instagram generator imported")
-        instagram_module = instagram_generator
+        instagram_generator_module = instagram_generator
+        print("✅ Instagram generator module loaded")
     except ImportError as e:
         print(f"❌ Instagram generator import error: {e}")
+    except Exception as e:
+        print(f"❌ Instagram generator initialization error: {e}")
     
-    return scraper_module, instagram_module
+    return scraper_module, instagram_generator_module
 
-def get_project_directories():
-    """Get standard project directory paths"""
-    base_dir = '/var/www/tools'
-    
-    directories = {
-        'base_dir': base_dir,
-        'data_dir': os.path.join(base_dir, 'data'),
-        'products_dir': os.path.join(base_dir, 'data', 'products'),
-        'temp_dir': os.path.join(base_dir, 'temp_ads'),
-        'templates_dir': os.path.join(base_dir, 'templates'),
-        'master_db': os.path.join(base_dir, 'data', 'products_master.json')
+def get_supported_sites():
+    """Get configuration for all supported WooCommerce sites"""
+    return {
+        'ineedhemp': {
+            'name': 'I Need Hemp',
+            'domain': 'ineedhemp.com',
+            'base_url': 'https://ineedhemp.com',
+            'description': 'Premium vaporizer and concentrate products'
+        },
+        'nicedreamz': {
+            'name': 'Nice Dreamz Wholesale',
+            'domain': 'nicedreamzwholesale.com', 
+            'base_url': 'https://nicedreamzwholesale.com',
+            'description': 'Wholesale vaporizer products and accessories'
+        },
+        'tribeseed': {
+            'name': 'Tribe Seed Bank',
+            'domain': 'tribeseedbank.com',
+            'base_url': 'https://tribeseedbank.com', 
+            'description': 'Premium seeds and growing supplies'
+        }
     }
-    
-    # Create directories if they don't exist
-    for key, directory in directories.items():
-        if key != 'master_db':  # Don't create the JSON file, just directories
-            os.makedirs(directory, exist_ok=True)
-    
-    return directories
 
-def verify_component_availability():
-    """Check which components are available"""
-    availability = {
-        'scraper_available': False,
-        'instagram_available': False,
-        'enhanced_images_available': False
+def validate_environment():
+    """Validate that the environment is properly configured"""
+    issues = []
+    
+    # Check if we're in the correct directory
+    current_dir = Path.cwd()
+    expected_dir = Path('/var/www/tools')
+    
+    if current_dir != expected_dir:
+        issues.append(f"Working directory should be {expected_dir}, but is {current_dir}")
+    
+    # Check for required files
+    required_files = [
+        'flask_wrapper.py',
+        'product_scraper_core.py',
+        'unified_scraper.py',
+        'database_manager.py',
+        'path_utils.py'
+    ]
+    
+    for filename in required_files:
+        filepath = expected_dir / filename
+        if not filepath.exists():
+            issues.append(f"Missing required file: {filename}")
+    
+    # Check for .env file
+    env_file = expected_dir / '.env'
+    if not env_file.exists():
+        issues.append("Missing .env file with API credentials")
+    
+    # Check virtual environment
+    venv_path = expected_dir / 'new-flask-env'
+    if not venv_path.exists():
+        issues.append("Virtual environment 'new-flask-env' not found")
+    
+    if issues:
+        print("⚠️ Environment validation issues:")
+        for issue in issues:
+            print(f"  - {issue}")
+        return False
+    else:
+        print("✅ Environment validation passed")
+        return True
+
+def get_app_info():
+    """Get application information and status"""
+    return {
+        'name': 'Dreamz Social Media Marketing Hub',
+        'version': '3.0-universal',
+        'description': 'Universal WooCommerce scraping and social media content generation',
+        'supported_sites': len(get_supported_sites()),
+        'features': [
+            'Multi-site WooCommerce scraping',
+            'Instagram post generation',
+            'Facebook post generation', 
+            'Product image processing',
+            'Automated content creation'
+        ]
     }
+
+# Initialize on import
+if __name__ == '__main__':
+    print("App Configuration Test")
+    print("=" * 30)
     
-    try:
-        import unified_scraper
-        availability['scraper_available'] = True
-    except ImportError:
-        pass
+    # Test path setup
+    base_dir = setup_app_paths()
     
-    try:
-        import instagram_generator
-        availability['instagram_available'] = True
-    except ImportError:
-        pass
+    # Test environment validation
+    is_valid = validate_environment()
     
-    try:
-        import enhanced_image_processor
-        availability['enhanced_images_available'] = True
-    except ImportError:
-        pass
+    # Test component initialization
+    scraper, instagram = initialize_components()
     
-    return availability
+    # Show app info
+    app_info = get_app_info()
+    print(f"\nApp: {app_info['name']} v{app_info['version']}")
+    print(f"Supported sites: {app_info['supported_sites']}")
+    print("Features:")
+    for feature in app_info['features']:
+        print(f"  - {feature}")
+    
+    # Show supported sites
+    print("\nSupported Sites:")
+    sites = get_supported_sites()
+    for key, site in sites.items():
+        print(f"  - {site['name']} ({site['domain']})")

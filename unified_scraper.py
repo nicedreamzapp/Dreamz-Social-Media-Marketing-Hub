@@ -1,6 +1,6 @@
 """
-Unified Scraper - REDUCED VERSION
-Main scraper class with utilities moved to separate modules
+Unified Scraper - Universal WooCommerce Version
+Main scraper class that works across multiple WooCommerce sites
 """
 import os
 import json
@@ -21,7 +21,7 @@ except ImportError:
     ENHANCED_IMAGES = False
 
 class CleanProductScraper:
-    """Main scraper class - REDUCED VERSION with utilities extracted"""
+    """Universal WooCommerce scraper - works across multiple domains"""
     
     def __init__(self):
         self.headers = {
@@ -44,7 +44,36 @@ class CleanProductScraper:
         else:
             self.image_processor = None
         
-        print(f"✓ Clean scraper ready - VPS paths configured")
+        # Supported site configurations
+        self.sites = {
+            'ineedhemp': {
+                'domain': 'ineedhemp.com',
+                'base_url': 'https://ineedhemp.com',
+                'best_sellers': '/product-category/best-sellers/',
+                'featured': '/featured-products/'
+            },
+            'nicedreamz': {
+                'domain': 'nicedreamzwholesale.com',
+                'base_url': 'https://nicedreamzwholesale.com',
+                'best_sellers': '/product-category/best-sellers/',
+                'featured': '/featured-products/'
+            },
+            'tribeseed': {
+                'domain': 'tribeseedbank.com',
+                'base_url': 'https://tribeseedbank.com',
+                'best_sellers': '/product-category/best-sellers/',
+                'featured': '/featured-products/'
+            }
+        }
+        
+        print(f"✓ Universal scraper ready - supports {len(self.sites)} sites")
+    
+    def detect_site_from_url(self, url):
+        """Auto-detect which site configuration to use"""
+        for site_key, config in self.sites.items():
+            if config['domain'] in url:
+                return site_key, config
+        return None, None
     
     def get_existing_products(self, scrape_source=None):
         """Get existing products with optional source filtering"""
@@ -138,6 +167,11 @@ class CleanProductScraper:
     
     def process_single_product(self, url, scrape_source="unknown"):
         """Process one product with source-aware duplicate checking"""
+        # Detect site
+        site_key, site_config = self.detect_site_from_url(url)
+        if not site_config:
+            print(f"  Warning: URL not from supported site: {url}")
+        
         # Source-specific duplicate checking
         if scrape_source == "custom":
             existing_products = self.get_existing_products("custom")
@@ -186,7 +220,8 @@ class CleanProductScraper:
             'image_urls': image_urls,
             'local_images': local_images,
             'image_count': len(local_images),
-            'scrape_source': scrape_source
+            'scrape_source': scrape_source,
+            'site_key': site_key
         })
         
         self.save_product_data(product_data, product_folder)
@@ -194,41 +229,54 @@ class CleanProductScraper:
         print(f"  Total images: {len(local_images)}")
         return product_data
     
-    def get_product_urls(self, category, limit=None):
-        """Get product URLs with source-aware duplicate prevention"""
+    def get_product_urls(self, category, limit=None, site='ineedhemp'):
+        """Get product URLs with site selection and source-aware duplicate prevention"""
+        if site not in self.sites:
+            print(f"Error: Site '{site}' not supported")
+            return []
+        
+        site_config = self.sites[site]
         existing_products = self.get_existing_products(category)
         
         if category == 'best_sellers':
-            url = "https://ineedhemp.com/product-category/best-sellers/"
+            url = site_config['base_url'] + site_config['best_sellers']
             links = self.scraper_core.get_product_urls_from_page(url, limit)
             
             new_links = [url for url in links if url not in existing_products]
             skipped = len(links) - len(new_links)
             
-            print(f"Found {len(new_links)} new best sellers (skipped {skipped} existing)")
+            print(f"Found {len(new_links)} new best sellers from {site} (skipped {skipped} existing)")
             return new_links
             
         elif category == 'featured':
-            url = "https://ineedhemp.com/featured-products/"
+            url = site_config['base_url'] + site_config['featured']
             links = self.scraper_core.get_product_urls_from_page(url, limit or 20)
             
             new_links = [url for url in links if url not in existing_products]
             skipped = len(links) - len(new_links)
             
-            print(f"Found {len(new_links)} new featured products (skipped {skipped} existing)")
+            print(f"Found {len(new_links)} new featured products from {site} (skipped {skipped} existing)")
             return new_links
         
         return []
     
     def scrape_custom_url(self, url):
-        """Custom URL scraper that allows re-scraping products from other sources"""
+        """Custom URL scraper that works with any supported site"""
         print(f"Custom URL Scraper")
         print("=" * 40)
         
-        # Validate and clean URL
+        # Auto-detect site and validate
+        site_key, site_config = self.detect_site_from_url(url)
+        
+        if not site_config:
+            print(f"Warning: URL not from a supported site")
+            print(f"Supported sites: {', '.join([config['domain'] for config in self.sites.values()])}")
+            return []
+        
+        # Clean URL if needed
         if not url.startswith('http'):
             if url.startswith('/'):
-                url = 'https://ineedhemp.com' + url
+                url = site_config['base_url'] + url
             else:
                 url = 'https://' + url
         
@@ -241,6 +289,7 @@ class CleanProductScraper:
         if url in existing_custom_products:
             print(f"Product already scraped as custom URL - will re-scrape anyway")
         
+        print(f"Detected site: {site_config['domain']}")
         return [url]
     
     def scrape_products(self, urls, mode_name):
@@ -332,43 +381,57 @@ def main():
     """Main function for command line usage"""
     scraper = CleanProductScraper()
     
-    print("UNIFIED SCRAPER v3.0 - REDUCED VERSION")
+    print("UNIVERSAL WOOCOMMERCE SCRAPER v3.0")
     print("=" * 50)
-    print("✓ Utilities moved to separate modules")
-    print("✓ All paths work with Flask web app")
-    print("✓ Source-aware duplicate checking")
+    print(f"✓ Supports {len(scraper.sites)} sites:")
+    for site_key, config in scraper.sites.items():
+        print(f"  - {config['domain']}")
+    print()
     if ENHANCED_IMAGES:
         print("✓ Enhanced image processing active")
     else:
         print("⚠ Basic image processing")
     print()
-    print("1. Scrape Top 15 Best Sellers")
-    print("2. Scrape Featured Products (Max 20)")
-    print("3. Custom URL Scraper")
+    print("1. Scrape Best Sellers (choose site)")
+    print("2. Scrape Featured Products (choose site)")
+    print("3. Custom URL Scraper (any supported site)")
     print("4. Show Database Stats") 
     print("5. Exit")
     
     while True:
         choice = input("\nSelect option (1-5): ").strip()
         
-        if choice == '1':
-            urls = scraper.get_product_urls('best_sellers', 15)
-            if urls:
-                scraper.scrape_products(urls, "Best Sellers (Top 15)")
-            else:
-                print("No new best sellers found!")
-            break
+        if choice in ['1', '2']:
+            print("\nSelect site:")
+            for i, (site_key, config) in enumerate(scraper.sites.items(), 1):
+                print(f"{i}. {config['domain']}")
             
-        elif choice == '2':
-            urls = scraper.get_product_urls('featured', 20)
-            if urls:
-                scraper.scrape_products(urls, "Featured Products (Max 20)")
-            else:
-                print("No new featured products found!")
-            break
+            site_choice = input(f"Choose site (1-{len(scraper.sites)}): ").strip()
+            try:
+                site_index = int(site_choice) - 1
+                site_key = list(scraper.sites.keys())[site_index]
+            except (ValueError, IndexError):
+                print("Invalid site choice")
+                continue
+            
+            if choice == '1':
+                urls = scraper.get_product_urls('best_sellers', 15, site_key)
+                if urls:
+                    scraper.scrape_products(urls, f"Best Sellers from {scraper.sites[site_key]['domain']}")
+                else:
+                    print("No new best sellers found!")
+                break
+            
+            elif choice == '2':
+                urls = scraper.get_product_urls('featured', 20, site_key)
+                if urls:
+                    scraper.scrape_products(urls, f"Featured Products from {scraper.sites[site_key]['domain']}")
+                else:
+                    print("No new featured products found!")
+                break
             
         elif choice == '3':
-            url = input("Enter product URL: ").strip()
+            url = input("Enter product URL (from any supported site): ").strip()
             if url:
                 urls = scraper.scrape_custom_url(url)
                 if urls:

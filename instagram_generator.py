@@ -363,4 +363,3 @@ if __name__ == "__main__":
             print("-" * 40)
             print(post_data['caption'])
             print("-" * 40)
-            print("This text will be sent to ChatGPT to create the actual Instagram caption.")

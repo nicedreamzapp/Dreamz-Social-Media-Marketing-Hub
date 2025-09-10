@@ -1,4 +1,4 @@
-/* Main App - Application initialization and core functionality */
+/* Main App - Application initialization and core functionality - CLEANED VERSION */
 
 // Application initialization
 document.addEventListener('DOMContentLoaded', function() {
@@ -6,10 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeApp() {
-    console.log('🚀 Initializing Divine Tribe Marketing Hub');
+    console.log('🚀 Initializing Dreamz Social Media Marketing Hub');
     
-    // Load initial data
-    loadProducts();
+    // REMOVED: loadProducts() - now only called from app-state.js
     
     // Setup event listeners
     setupEventListeners();
@@ -57,8 +56,8 @@ function initializeUIComponents() {
     // Initialize progress indicators
     initializeProgressSystem();
     
-    // Setup auto-refresh for product count
-    setInterval(updateProductCount, 30000); // Update every 30 seconds
+    // Setup auto-refresh for product count - REDUCED frequency to avoid conflicts
+    setInterval(updateProductCount, 60000); // Update every 60 seconds instead of 30
 }
 
 function setupKeyboardShortcuts() {
@@ -106,37 +105,7 @@ function setupKeyboardShortcuts() {
                 break;
         }
         
-        // Navigation shortcuts
-        if (!event.ctrlKey && !event.metaKey && !event.altKey) {
-            switch(event.key) {
-                case 'Delete':
-                    if (selectedProductIndex !== null && !isModalOpen()) {
-                        deleteProduct(selectedProductIndex);
-                    }
-                    break;
-                case 'ArrowDown':
-                    if (!isModalOpen()) {
-                        event.preventDefault();
-                        navigateSelection(1);
-                    }
-                    break;
-                case 'ArrowUp':
-                    if (!isModalOpen()) {
-                        event.preventDefault();
-                        navigateSelection(-1);
-                    }
-                    break;
-                case 'Enter':
-                    if (selectedProductIndex !== null && !isModalOpen()) {
-                        event.preventDefault();
-                        generateInstagram();
-                    }
-                    break;
-                case 'Escape':
-                    closeAllModals();
-                    break;
-            }
-        }
+        // Navigation shortcuts - REMOVED duplicate handling (handled in app-state.js)
     });
 }
 
@@ -178,10 +147,8 @@ function handleBeforeUnload(event) {
 }
 
 function handleWindowFocus() {
-    // Refresh data when window regains focus
-    if (!isScrapingActive) {
-        loadProducts();
-    }
+    // REMOVED: loadProducts() - avoid unnecessary reloads that cause conflicts
+    console.log('Window focused');
 }
 
 function handleWindowBlur() {
@@ -205,7 +172,8 @@ function checkApplicationStatus() {
         'status-text',
         'progress-overlay',
         'custom-url-modal',
-        'alert-overlay'
+        'alert-overlay',
+        'site-selector' // NEW: Check for site selector
     ];
     
     const missingElements = requiredElements.filter(id => !document.getElementById(id));
@@ -273,39 +241,13 @@ function handleError(error, context = 'Unknown') {
     showToast(userMessage, 'error');
 }
 
-// Application state management
+// Application state management - SIMPLIFIED
 function getApplicationState() {
     return {
-        products: products,
         selectedProductIndex: selectedProductIndex,
         isScrapingActive: isScrapingActive,
         timestamp: Date.now()
     };
-}
-
-function saveApplicationState() {
-    try {
-        const state = getApplicationState();
-        localStorage.setItem('divineTribeAppState', JSON.stringify(state));
-    } catch (error) {
-        console.warn('Could not save application state:', error);
-    }
-}
-
-function restoreApplicationState() {
-    try {
-        const saved = localStorage.getItem('divineTribeAppState');
-        if (saved) {
-            const state = JSON.parse(saved);
-            // Only restore if recent (within 1 hour)
-            if (Date.now() - state.timestamp < 3600000) {
-                selectedProductIndex = state.selectedProductIndex;
-                console.log('Restored application state');
-            }
-        }
-    } catch (error) {
-        console.warn('Could not restore application state:', error);
-    }
 }
 
 // Performance monitoring
@@ -343,15 +285,10 @@ window.addEventListener('unload', cleanup);
 // Expose global functions for debugging
 window.divineApp = {
     getState: getApplicationState,
-    saveState: saveApplicationState,
-    restoreState: restoreApplicationState,
     cleanup: cleanup,
     showShortcuts: showKeyboardShortcuts,
     exportData: exportProductData
 };
-
-// Auto-save state periodically
-setInterval(saveApplicationState, 60000); // Save every minute
 
 // Initialize performance monitoring
 if (window.performance && window.performance.mark) {
@@ -366,6 +303,5 @@ if (window.performance && window.performance.mark) {
     });
 }
 
-console.log('🎉 Divine Tribe Marketing Hub loaded successfully');
+console.log('🎉 Dreamz Social Media Marketing Hub loaded successfully');
 console.log('📖 Press F1 for keyboard shortcuts');
-

@@ -1,15 +1,16 @@
 """
-Flask Wrapper for Divine Tribe Marketing Hub - WITH FACEBOOK SUPPORT
-Main Flask app with core routes including Facebook generation
+Flask Wrapper for Dreamz Social Media Marketing Hub - Universal Version
+Main Flask app supporting multiple WooCommerce sites with Instagram, Facebook, Reddit, and Twitter generation
 """
 import sys
 import os
 from pathlib import Path
-from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for, flash, make_response
 from flask_cors import CORS
 import json
 import threading
 from functools import wraps
+import time
 
 # Import from utility modules
 from app_config import setup_app_paths, initialize_components, USERS
@@ -20,7 +21,7 @@ from auth_routes import setup_auth_routes
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates')
 CORS(app)
-app.secret_key = 'divine-tribe-marketing-hub-secret-key-2025'
+app.secret_key = 'dreamz-social-media-marketing-hub-secret-key-2025'
 
 # Setup authentication routes
 setup_auth_routes(app, USERS)
@@ -38,6 +39,24 @@ try:
 except ImportError as e:
     print(f"❌ Facebook generator import error: {e}")
 
+# Import Reddit generator
+reddit_generator_module = None
+try:
+    import reddit_generator
+    print("✅ Reddit generator imported")
+    reddit_generator_module = reddit_generator
+except ImportError as e:
+    print(f"❌ Reddit generator import error: {e}")
+
+# Import Twitter generator
+twitter_generator_module = None
+try:
+    import twitter_generator
+    print("✅ Twitter generator imported")
+    twitter_generator_module = twitter_generator
+except ImportError as e:
+    print(f"❌ Twitter generator import error: {e}")
+
 # Global scraping status
 scraping_status = {
     'active': False,
@@ -47,17 +66,49 @@ scraping_status = {
     'expected_duration': 0
 }
 
+def add_ultra_cache_busting_headers(response):
+    """Add ultra-aggressive cache busting headers"""
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['Last-Modified'] = time.strftime('%a, %d %b %Y %H:%M:%S GMT')
+    response.headers['ETag'] = f'"{time.time()}"'
+    response.headers['Vary'] = '*'
+    response.headers['X-Cache-Buster'] = str(time.time())
+    return response
+
 class WebAppWrapper:
-    """Wrapper for web app functionality with Instagram and Facebook support"""
+    """Universal wrapper for web app functionality with multi-site support"""
     def __init__(self):
         self.current_products = []
         self.selected_product_index = None
         self.temp_folder = '/var/www/tools/temp_ads'
         self.database = ProductDatabase()
         
+        # Supported sites configuration
+        self.supported_sites = {
+            'ineedhemp': {
+                'name': 'iNeedHemp',
+                'domain': 'ineedhemp.com',
+                'base_url': 'https://ineedhemp.com'
+            },
+            'nicedreamz': {
+                'name': 'Nice Dreamz Wholesale', 
+                'domain': 'nicedreamzwholesale.com',
+                'base_url': 'https://nicedreamzwholesale.com'
+            },
+            'tribeseed': {
+                'name': 'Tribe Seed Bank',
+                'domain': 'tribeseedbank.com', 
+                'base_url': 'https://tribeseedbank.com'
+            }
+        }
+        
         os.makedirs(self.temp_folder, exist_ok=True)
         os.makedirs(os.path.join(self.temp_folder, 'instagram'), exist_ok=True)
         os.makedirs(os.path.join(self.temp_folder, 'facebook'), exist_ok=True)
+        os.makedirs(os.path.join(self.temp_folder, 'reddit'), exist_ok=True)
+        os.makedirs(os.path.join(self.temp_folder, 'twitter'), exist_ok=True)
         
         self.load_products_data()
         
@@ -82,6 +133,30 @@ class WebAppWrapper:
         except Exception as e:
             print(f"❌ Facebook generator initialization error: {e}")
             self.facebook_generator = None
+        
+        # Initialize Reddit generator
+        try:
+            if reddit_generator_module:
+                self.reddit_generator = reddit_generator_module.RedditGenerator()
+                print("✅ Reddit generator initialized")
+            else:
+                self.reddit_generator = None
+        except Exception as e:
+            print(f"❌ Reddit generator initialization error: {e}")
+            self.reddit_generator = None
+        
+        # Initialize Twitter generator
+        try:
+            if twitter_generator_module:
+                self.twitter_generator = twitter_generator_module.TwitterGenerator()
+                print("✅ Twitter generator initialized")
+            else:
+                self.twitter_generator = None
+        except Exception as e:
+            print(f"❌ Twitter generator initialization error: {e}")
+            self.twitter_generator = None
+        
+        print(f"✅ Web app initialized with {len(self.supported_sites)} supported sites")
 
     def load_products_data(self):
         """Load products with path normalization"""
@@ -134,6 +209,7 @@ def instagram_review(product_index):
         if not web_app.instagram_generator:
             return "Instagram generator not available", 500
             
+        # FORCE FRESH GENERATION - no caching
         post_data = web_app.instagram_generator.generate_instagram_post(
             product_index,
             web_app.current_products
@@ -142,10 +218,20 @@ def instagram_review(product_index):
         if not post_data:
             return "Failed to generate Instagram post data", 500
         
-        return render_template('instagram_review.html',
-                             product=product,
-                             post_data=post_data,
-                             product_index=product_index)
+        # Add timestamp to post data to force template refresh
+        post_data['cache_buster'] = str(time.time())
+        post_data['generation_timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        
+        response = make_response(render_template('instagram_review.html',
+                                               product=product,
+                                               post_data=post_data,
+                                               product_index=product_index,
+                                               cache_buster=str(time.time())))
+        
+        # Ultra-aggressive cache busting
+        response = add_ultra_cache_busting_headers(response)
+        
+        return response
     except Exception as e:
         print(f"❌ Instagram review error: {e}")
         return f"Error generating Instagram post: {e}", 500
@@ -153,7 +239,7 @@ def instagram_review(product_index):
 @app.route('/facebook_review/<int:product_index>')
 @login_required
 def facebook_review(product_index):
-    """Facebook review page - NEW ROUTE"""
+    """Facebook review page"""
     if product_index >= len(web_app.current_products):
         return "Product not found", 404
     
@@ -163,6 +249,7 @@ def facebook_review(product_index):
         if not web_app.facebook_generator:
             return "Facebook generator not available", 500
             
+        # FORCE FRESH GENERATION - no caching
         post_data = web_app.facebook_generator.generate_facebook_post(
             product_index,
             web_app.current_products
@@ -171,13 +258,103 @@ def facebook_review(product_index):
         if not post_data:
             return "Failed to generate Facebook post data", 500
         
-        return render_template('facebook_review.html',
-                             product=product,
-                             post_data=post_data,
-                             product_index=product_index)
+        # Add timestamp to post data to force template refresh
+        post_data['cache_buster'] = str(time.time())
+        post_data['generation_timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        
+        response = make_response(render_template('facebook_review.html',
+                                               product=product,
+                                               post_data=post_data,
+                                               product_index=product_index,
+                                               cache_buster=str(time.time())))
+        
+        # Ultra-aggressive cache busting
+        response = add_ultra_cache_busting_headers(response)
+        
+        return response
     except Exception as e:
         print(f"❌ Facebook review error: {e}")
         return f"Error generating Facebook post: {e}", 500
+
+@app.route('/reddit_review/<int:product_index>')
+@login_required
+def reddit_review(product_index):
+    """Reddit review page"""
+    if product_index >= len(web_app.current_products):
+        return "Product not found", 404
+    
+    product = web_app.current_products[product_index]
+    
+    try:
+        if not web_app.reddit_generator:
+            return "Reddit generator not available", 500
+            
+        # FORCE FRESH GENERATION - no caching
+        post_data = web_app.reddit_generator.generate_reddit_post(
+            product_index,
+            web_app.current_products
+        )
+        
+        if not post_data:
+            return "Failed to generate Reddit post data", 500
+        
+        # Add timestamp to post data to force template refresh
+        post_data['cache_buster'] = str(time.time())
+        post_data['generation_timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        
+        response = make_response(render_template('reddit_review.html',
+                                               product=product,
+                                               post_data=post_data,
+                                               product_index=product_index,
+                                               cache_buster=str(time.time())))
+        
+        # Ultra-aggressive cache busting
+        response = add_ultra_cache_busting_headers(response)
+        
+        return response
+    except Exception as e:
+        print(f"❌ Reddit review error: {e}")
+        return f"Error generating Reddit post: {e}", 500
+
+@app.route('/twitter_review/<int:product_index>')
+@login_required
+def twitter_review(product_index):
+    """Twitter review page"""
+    if product_index >= len(web_app.current_products):
+        return "Product not found", 404
+    
+    product = web_app.current_products[product_index]
+    
+    try:
+        if not web_app.twitter_generator:
+            return "Twitter generator not available", 500
+            
+        # FORCE FRESH GENERATION - no caching
+        post_data = web_app.twitter_generator.generate_twitter_post(
+            product_index,
+            web_app.current_products
+        )
+        
+        if not post_data:
+            return "Failed to generate Twitter post data", 500
+        
+        # Add timestamp to post data to force template refresh
+        post_data['cache_buster'] = str(time.time())
+        post_data['generation_timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        
+        response = make_response(render_template('twitter_review.html',
+                                               product=product,
+                                               post_data=post_data,
+                                               product_index=product_index,
+                                               cache_buster=str(time.time())))
+        
+        # Ultra-aggressive cache busting
+        response = add_ultra_cache_busting_headers(response)
+        
+        return response
+    except Exception as e:
+        print(f"❌ Twitter review error: {e}")
+        return f"Error generating Twitter post: {e}", 500
 
 @app.route('/api/products')
 @login_required
@@ -186,6 +363,15 @@ def get_products():
         'products': web_app.current_products,
         'selected_index': web_app.selected_product_index,
         'total_count': len(web_app.current_products)
+    })
+
+@app.route('/api/supported_sites')
+@login_required
+def get_supported_sites():
+    """New API endpoint to get supported sites for UI"""
+    return jsonify({
+        'sites': web_app.supported_sites,
+        'default_site': 'ineedhemp'
     })
 
 @app.route('/api/scraping_status')
@@ -204,7 +390,7 @@ def get_scraping_status():
     return jsonify(scraping_status)
 
 def run_scraper_in_background(scraper_type, **kwargs):
-    """Generic background scraper runner"""
+    """Universal background scraper runner with site support"""
     global scraping_status
     
     def run_scraper():
@@ -219,16 +405,19 @@ def run_scraper_in_background(scraper_type, **kwargs):
                 return
 
             scraper = scraper_module.CleanProductScraper()
+            site = kwargs.get('site', 'ineedhemp')
             
             if scraper_type == 'best_sellers':
-                urls = scraper.get_product_urls('best_sellers', 15)
-                scraping_status['message'] = f'Found {len(urls)} best sellers to scrape'
-                new_products = scraper.scrape_products(urls, "Best Sellers (Top 15)")
+                urls = scraper.get_product_urls('best_sellers', 15, site)
+                site_name = web_app.supported_sites.get(site, {}).get('name', site)
+                scraping_status['message'] = f'Found {len(urls)} best sellers from {site_name}'
+                new_products = scraper.scrape_products(urls, f"Best Sellers from {site_name}")
                 
             elif scraper_type == 'featured':
-                urls = scraper.get_product_urls('featured', 20)
-                scraping_status['message'] = f'Found {len(urls)} featured products to scrape'
-                new_products = scraper.scrape_products(urls, "Featured Products (Max 20)")
+                urls = scraper.get_product_urls('featured', 20, site)
+                site_name = web_app.supported_sites.get(site, {}).get('name', site)
+                scraping_status['message'] = f'Found {len(urls)} featured products from {site_name}'
+                new_products = scraper.scrape_products(urls, f"Featured Products from {site_name}")
                 
             elif scraper_type == 'custom':
                 url = kwargs.get('url', '')
@@ -279,28 +468,48 @@ def run_scraper_in_background(scraper_type, **kwargs):
 @app.route('/api/scrape_best_sellers', methods=['POST'])
 @login_required
 def scrape_best_sellers():
+    """Enhanced best sellers API with site selection"""
     global scraping_status
     import time
+    
+    data = request.get_json() or {}
+    site = data.get('site', 'ineedhemp')
+    
+    # Validate site
+    if site not in web_app.supported_sites:
+        return jsonify({'success': False, 'error': f'Unsupported site: {site}'}), 400
+    
+    site_name = web_app.supported_sites[site]['name']
     scraping_status = {
         'active': True, 'progress': 0,
-        'message': 'Starting Best Sellers scraper...',
+        'message': f'Starting Best Sellers scraper for {site_name}...',
         'start_time': time.time(), 'expected_duration': 90
     }
-    run_scraper_in_background('best_sellers')
-    return jsonify({'success': True, 'message': 'Best sellers scraping started'})
+    run_scraper_in_background('best_sellers', site=site)
+    return jsonify({'success': True, 'message': f'Best sellers scraping started for {site_name}'})
 
 @app.route('/api/scrape_featured', methods=['POST'])
 @login_required
 def scrape_featured():
+    """Enhanced featured products API with site selection"""
     global scraping_status
     import time
+    
+    data = request.get_json() or {}
+    site = data.get('site', 'ineedhemp')
+    
+    # Validate site
+    if site not in web_app.supported_sites:
+        return jsonify({'success': False, 'error': f'Unsupported site: {site}'}), 400
+    
+    site_name = web_app.supported_sites[site]['name']
     scraping_status = {
         'active': True, 'progress': 0,
-        'message': 'Starting Featured Products scraper...',
+        'message': f'Starting Featured Products scraper for {site_name}...',
         'start_time': time.time(), 'expected_duration': 120
     }
-    run_scraper_in_background('featured')
-    return jsonify({'success': True, 'message': 'Featured products scraping started'})
+    run_scraper_in_background('featured', site=site)
+    return jsonify({'success': True, 'message': f'Featured products scraping started for {site_name}'})
 
 @app.route('/api/scrape_custom', methods=['POST'])
 @login_required
@@ -359,7 +568,7 @@ def generate_instagram():
 @app.route('/api/generate_facebook', methods=['POST'])
 @login_required
 def generate_facebook():
-    """Generate Facebook post - NEW ROUTE"""
+    """Generate Facebook post"""
     try:
         if not web_app.facebook_generator:
             return jsonify({'error': 'Facebook generator not available'}), 500
@@ -388,6 +597,78 @@ def generate_facebook():
             })
         else:
             return jsonify({'error': 'Failed to generate Facebook post'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/generate_reddit', methods=['POST'])
+@login_required
+def generate_reddit():
+    """Generate Reddit post"""
+    try:
+        if not web_app.reddit_generator:
+            return jsonify({'error': 'Reddit generator not available'}), 500
+            
+        data = request.get_json()
+        product_index = data.get('product_index', 0)
+        
+        if product_index >= len(web_app.current_products):
+            return jsonify({'error': 'Invalid product index'}), 400
+        
+        post_data = web_app.reddit_generator.generate_reddit_post(
+            product_index, web_app.current_products
+        )
+        
+        if post_data:
+            try:
+                files = web_app.reddit_generator.save_post_data(post_data)
+            except Exception as save_error:
+                print(f"❌ Save error: {save_error}")
+                files = []
+            
+            return jsonify({
+                'success': True,
+                'post_data': post_data,
+                'files': files
+            })
+        else:
+            return jsonify({'error': 'Failed to generate Reddit post'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/generate_twitter', methods=['POST'])
+@login_required
+def generate_twitter():
+    """Generate Twitter post"""
+    try:
+        if not web_app.twitter_generator:
+            return jsonify({'error': 'Twitter generator not available'}), 500
+            
+        data = request.get_json()
+        product_index = data.get('product_index', 0)
+        
+        if product_index >= len(web_app.current_products):
+            return jsonify({'error': 'Invalid product index'}), 400
+        
+        post_data = web_app.twitter_generator.generate_twitter_post(
+            product_index, web_app.current_products
+        )
+        
+        if post_data:
+            try:
+                files = web_app.twitter_generator.save_post_data(post_data)
+            except Exception as save_error:
+                print(f"❌ Save error: {save_error}")
+                files = []
+            
+            return jsonify({
+                'success': True,
+                'post_data': post_data,
+                'files': files
+            })
+        else:
+            return jsonify({'error': 'Failed to generate Twitter post'}), 500
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -447,10 +728,14 @@ def clear_temp():
             os.makedirs(temp_path)
             os.makedirs(os.path.join(temp_path, 'instagram'))
             os.makedirs(os.path.join(temp_path, 'facebook'))
+            os.makedirs(os.path.join(temp_path, 'reddit'))
+            os.makedirs(os.path.join(temp_path, 'twitter'))
         else:
             os.makedirs(temp_path, exist_ok=True)
             os.makedirs(os.path.join(temp_path, 'instagram'), exist_ok=True)
             os.makedirs(os.path.join(temp_path, 'facebook'), exist_ok=True)
+            os.makedirs(os.path.join(temp_path, 'reddit'), exist_ok=True)
+            os.makedirs(os.path.join(temp_path, 'twitter'), exist_ok=True)
             
         return jsonify({'success': True, 'message': 'Temp folder cleared'})
     except Exception as e:
@@ -530,7 +815,7 @@ def download_file():
 @app.route('/temp_ads/<path:filename>')
 @login_required
 def serve_temp_file(filename):
-    """Serve files from VPS temp folder - supports both Instagram and Facebook"""
+    """Serve files from VPS temp folder - supports Instagram, Facebook, Reddit, and Twitter"""
     import glob
     try:
         base_temp = '/var/www/tools/temp_ads'
@@ -542,6 +827,8 @@ def serve_temp_file(filename):
         search_patterns = [
             f"{base_temp}/instagram/*/{filename}",
             f"{base_temp}/facebook/*/{filename}",
+            f"{base_temp}/reddit/*/{filename}",
+            f"{base_temp}/twitter/*/{filename}",
             f"{base_temp}/*/{filename}",
             f"{base_temp}/**/{filename}"
         ]
@@ -574,11 +861,26 @@ def serve_product_image(filename):
         return "File not found", 404
 
 if __name__ == '__main__':
-    print("🚀 Starting Divine Tribe Marketing Hub - Web Version")
+    print("🚀 Starting Dreamz Social Media Marketing Hub - Universal Version")
     print("📸 Instagram support: Active")
     print("📘 Facebook support: Active")
+    print("🤖 Reddit support: Active")
+    print("🐦 Twitter support: Active")
+    print(f"🌐 Supported sites: {', '.join([site['name'] for site in web_app.supported_sites.values()])}")
     print("🌐 Access at: http://tools.marijuanaunion.com")
     print(f"📊 Current products loaded: {len(web_app.current_products)}")
-    print("✅ Instagram and Facebook generators ready")
+    print("✅ Universal scraping ready")
     
     app.run(debug=True, host='0.0.0.0', port=8080)
+@app.route('/api/refresh_products')
+@login_required  
+def refresh_products():
+    try:
+        web_app.load_products_data()  # Force reload from database
+        return jsonify({
+            'success': True, 
+            'products_count': len(web_app.current_products),
+            'products': [p.get('title', 'Unknown')[:50] for p in web_app.current_products]
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
